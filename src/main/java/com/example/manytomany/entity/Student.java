@@ -1,25 +1,17 @@
 package com.example.manytomany.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import java.util.Set;
+import javax.persistence.*;
 
 /**
+ * 學生
  *
- * @author someone
+ * @author 歐炫
  */
 @Entity
-@Table(catalog = "manytomany", schema = "public")
+@SuppressWarnings("PersistenceUnitPresent")
+@Table(catalog = "manytomany", schema = "public", name = "student")
 public class Student implements Serializable {
 
 	private static final long serialVersionUID = 5681823641952133327L;
@@ -34,8 +26,8 @@ public class Student implements Serializable {
 	private String fullName;
 
 	@JoinTable(name = "course_rating", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
-	@ManyToMany(fetch = FetchType.EAGER)//(mappedBy = "studentCollection")
-	private Collection<Course> courseCollection;
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Course> courses;
 
 	public Student() {
 	}
@@ -60,12 +52,12 @@ public class Student implements Serializable {
 		this.fullName = fullName;
 	}
 
-	public Collection<Course> getCourseCollection() {
-		return courseCollection;
+	public Set<Course> getCourses() {
+		return courses;
 	}
 
-	public void setCourseCollection(Collection<Course> courseCollection) {
-		this.courseCollection = courseCollection;
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
 	}
 
 	@Override
@@ -77,7 +69,6 @@ public class Student implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof Student)) {
 			return false;
 		}
@@ -89,5 +80,4 @@ public class Student implements Serializable {
 	public String toString() {
 		return "com.example.manytomany.entity.Student[ id=" + id + " ]";
 	}
-
 }

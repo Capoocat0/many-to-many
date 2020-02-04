@@ -1,8 +1,10 @@
 package com.example.manytomany.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,11 +15,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
+ * 課程
  *
- * @author someone
+ * @author 歐炫
  */
 @Entity
-@Table(catalog = "manytomany", schema = "public")
+@SuppressWarnings("PersistenceUnitPresent")
+@Table(catalog = "manytomany", schema = "public", name = "course")
 public class Course implements Serializable {
 
 	private static final long serialVersionUID = 4959301416563126328L;
@@ -31,14 +35,9 @@ public class Course implements Serializable {
 	@Column(name = "display_name")
 	private String displayName;
 
-//	@JoinTable(name = "course_rating", joinColumns = {
-//		@JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
-//	}, inverseJoinColumns = {
-//		@JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false)
-//	})
-	
-	@ManyToMany(mappedBy = "courseCollection", fetch = FetchType.EAGER)
-	private Collection<Student> studentCollection;
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "courses")
+	private Set<Student> students;
 
 	public Course() {
 	}
@@ -63,12 +62,12 @@ public class Course implements Serializable {
 		this.displayName = displayName;
 	}
 
-	public Collection<Student> getStudentCollection() {
-		return studentCollection;
+	public Set<Student> getStudents() {
+		return students;
 	}
 
-	public void setStudentCollection(Collection<Student> studentCollection) {
-		this.studentCollection = studentCollection;
+	public void setStudents(Set<Student> students) {
+		this.students = students;
 	}
 
 	@Override
@@ -80,7 +79,6 @@ public class Course implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof Course)) {
 			return false;
 		}

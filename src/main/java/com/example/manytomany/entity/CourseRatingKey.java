@@ -1,14 +1,14 @@
 package com.example.manytomany.entity;
 
-/**
- *
- * @author someone
- */
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+/**
+ * 課程評分的主鍵
+ *
+ * @author 歐炫
+ */
 @Embeddable
 public class CourseRatingKey implements Serializable {
 

@@ -8,5 +8,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author someone
  */
 public interface CourseRepository extends CrudRepository<Course, Long> {
-	
+
+	public Course findOneById(Long id);
 }

@@ -1,5 +1,6 @@
 package com.example.manytomany.entity;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -9,12 +10,14 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 /**
+ * 課程評分
  *
- * @author someone
+ * @author 歐炫
  */
 @Entity
-@Table(name = "course_rating")
-public class CourseRating {
+@SuppressWarnings("PersistenceUnitPresent")
+@Table(catalog = "manytomany", schema = "public", name = "course_rating")
+public class CourseRating implements Serializable {
 
 	@EmbeddedId
 	private CourseRatingKey id;
