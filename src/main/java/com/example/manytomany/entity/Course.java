@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cascade;
 
 /**
  * 課程
@@ -35,8 +36,9 @@ public class Course implements Serializable {
 	@Column(name = "display_name")
 	private String displayName;
 
+	//@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	@JsonIgnore
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "courses")
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "courses")
 	private Set<Student> students;
 
 	public Course() {
