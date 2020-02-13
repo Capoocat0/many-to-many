@@ -4,9 +4,11 @@ import com.example.manytomany.entity.Course;
 import com.example.manytomany.entity.Student;
 import com.example.manytomany.repository.CourseRepository;
 import com.example.manytomany.repository.StudentRepository;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Optional;
 import java.util.Set;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @SpringBootApplication
@@ -29,6 +32,40 @@ public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+	}
+
+	@GetMapping(path = "/student", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	String student() {
+		JSONObject jSONObject = new JSONObject();
+		for (Student student : studentRepository.findAll()) {
+			for (Course course : student.getCourses()) {
+				jSONObject.append(student.getFullName(), course.getDisplayName());
+			}
+		}
+		return jSONObject.toString();
+	}
+
+	@GetMapping(path = "/students", produces = "application/json;charset=UTF-8")
+	ResponseEntity<Collection<Student>> students() {
+		return ResponseEntity.ok(studentRepository.findAll());
+	}
+
+	@GetMapping(path = "/course", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	String course() {
+		JSONObject jSONObject = new JSONObject();
+		for (Course course : courseRepository.findAll()) {
+			for (Student student : course.getStudents()) {
+				jSONObject.append(course.getDisplayName(), student.getFullName());
+			}
+		}
+		return jSONObject.toString();
+	}
+
+	@GetMapping(path = "/courses", produces = "application/json;charset=UTF-8")
+	ResponseEntity<Collection<Course>> courses() {
+		return ResponseEntity.ok(courseRepository.findAll());
 	}
 
 	@GetMapping(path = "/course/{id}.json", produces = "application/json;charset=UTF-8")
