@@ -36,7 +36,7 @@ public class Course implements Serializable {
 	@Column(name = "display_name")
 	private String displayName;
 
-	//@JsonIgnore
+	@JsonIgnore
 	@Fetch(value = FetchMode.JOIN)
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "courses")
 	private Set<Student> students;

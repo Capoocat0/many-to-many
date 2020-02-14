@@ -6,6 +6,7 @@ import com.example.manytomany.repository.CourseRepository;
 import com.example.manytomany.repository.StudentRepository;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import org.json.JSONObject;
@@ -110,18 +111,13 @@ public class Application {
 
 	@PostMapping(path = "/student/{id}.json", produces = "application/json;charset=UTF-8")
 	@SuppressWarnings("UnusedAssignment")
-	ResponseEntity<Student> student(@PathVariable Long id, @RequestParam(defaultValue = "") String fullName, @RequestParam Set<Course> courses) {
-		Student student = null;
+	ResponseEntity<Student> student(@PathVariable("id") Long id, @RequestParam Set<Course> courses) {
+		Student student = new Student();
 		Optional<Student> optional = studentRepository.findById(id);
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		student = optional.get();
-
-		if (null == fullName || fullName.isEmpty()) {
-			fullName = Long.toHexString(new GregorianCalendar().getTimeInMillis());
-		}
-		student.setFullName(fullName);
 
 		student.setCourses(courses);
 
